@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Chatアプリ</title>
+  <style>
+    /* この中にcssをかけます */
+  </style>
+</head>
+
+<body>
+  <!-- ブラウザの画面に見える内容 -->
+
+  <div>
+    <!-- 名前 -->
+    名前
+    <input type="text" id="username">
+  </div>
+
+  <div>
+    <!-- テキストエリア -->
+    テキスト
+    <textarea name="" id="text" cols="30" rows="10"></textarea>
+  </div>
+
+  <div>
+    <!-- 送信ボタン -->
+    <button id="send">送信</button>
+  </div>
+
+  <div>
+    <!-- 削除ボタン -->
+    <button id="clear">削除</button>
+  </div>
+
+  <div>
+    <!-- 保存されたデータが表示される箇所 -->
+    <div id="output"></div>
+  </div>
+
+  <!--/ ブラウザの画面に見える内容 -->
+
+  <!-- JQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <!--** 以下Firebase **-->
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <!-- ここにfirebaseのscriptを貼り付ける -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyCMKVVs5-GYjDM1X86CJYxsVbMm2yIBbKg",
+    authDomain: "dev18-chat01-7d43e.firebaseapp.com",
+    databaseURL: "https://dev18-chat01-7d43e.firebaseio.com",
+    projectId: "dev18-chat01-7d43e",
+    storageBucket: "dev18-chat01-7d43e.appspot.com",
+    messagingSenderId: "920580998570",
+    appId: "1:920580998570:web:f12e43222194f0661197d3"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    //firebaseのデーターベース（保存させる場所）を使いますよと言うjsのコードを貼り付ける
+    // xxxxxスクリプトを貼り付ける
+    const newPostRef = firebase.database().ref();
+
+
+    // ここから下にjqueryの処理を書いて練習します
+    // 送信ボタンをクリックされたら次の処理をする
+    $("#send").on("click", function () {
+      // データを登録で送る
+      newPostRef.push({
+        username:$("#username").val(),
+        text: $("#text").val()
+      })
+       $("#text").val("");
+    })
+      // 文字を空にする
+    
+// 受信処理
+newPostRef.on("child_added", function (data) {
+      //ここに保存されたデータが全て入ってくる
+      // function (data)のdataにfirebaseのデータが入ってくる
+      let v = data.val();
+      // let k = data.key; //今回は使いません
+      //console.logで受信=firebaseに登録されている中身を確認しよう！
+      console.log(v);
+      //テンプレートリテラル `` を活用して変数にhtmlを埋め込もう！ 
+      let str = `<p>${v.username}<br>${v.text}</p>`;
+      // ここでデータをhtmlに埋め込む prependには変数を埋め込もう！
+      $("#output").prepend(str);
+    });
+
+    $("xxx").on("keydown", function (event) {
+
+      // eventの中身をconsole.logでみてみよう！
+  
+  //firebase中身を削除したい・・・
+  $("#clear").on("click", function () {
+    newPostRef.ref(`dev18-chat01-7d43e`).child(``).remove();
+    })
+
+
+    })
+  </script>
+</body>
+
+</html>
